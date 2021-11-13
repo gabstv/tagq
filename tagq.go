@@ -31,7 +31,7 @@ var (
 	ErrUnsupportedTypeForQuery   = fmt.Errorf("Q(): unsupported type for query")
 )
 
-// Value is a queryable interface. It traverses strucrs, maps and slices using reflection.
+// Value is a queryable interface. It traverses structs, maps and slices using reflection.
 // It will also check the struct tags defined in the Tags() function.
 // The tags can be overriden by altering the global slice DefaultTags or by calling the SetTags() function.
 type Value interface {
