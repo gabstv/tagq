@@ -9,13 +9,6 @@ import (
 	"time"
 )
 
-type ValueKind int
-
-// all value kinds
-const (
-	ValueKindNil ValueKind = iota
-)
-
 // Common query errors
 var (
 	ErrValueIsNil                = fmt.Errorf("value is nil")
@@ -38,7 +31,7 @@ var (
 	ErrUnsupportedTypeForQuery   = fmt.Errorf("Q(): unsupported type for query")
 )
 
-// Value is a queryable interface. It works similar to jquery, but using reflection.
+// Value is a queryable interface. It traverses strucrs, maps and slices using reflection.
 // It will also check the struct tags defined in the Tags() function.
 // The tags can be overriden by altering the global slice DefaultTags or by calling the SetTags() function.
 type Value interface {
@@ -452,6 +445,7 @@ func Q(v interface{}, query ...string) Value {
 	return x.Q(query...)
 }
 
+// DefaultTags is the default slice of tags copied to a new Q instance.
 var DefaultTags = []string{"json", "xml", "param", "query", "header"}
 
 func copyDefaultTags() []string {
