@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -390,17 +391,20 @@ func (v *value) qnext(rv reflect.Value, query ...string) *value {
 			return vn
 		}
 		rvt := rv.Type()
-		for fieldi := 0; fieldi < rv.NumField(); fieldi++ {
-			field := rv.Field(fieldi)
-			sfield := rvt.Field(fieldi)
-			// sfield.Tag.
-			if field.Type().Name() == query[0] {
-				vn := v.new(field)
+		if len(query[0]) > 0 && strings.ToUpper(query[0][:1]) == query[0][:1] {
+			// try to get a field by name like rv.FieldByName(query[0])
+			field := rv.FieldByName(query[0])
+			if field.IsValid() {
+				vn := v.new(rv.FieldByName(query[0]))
 				if len(query) == 1 {
 					return vn
 				}
-				return vn.qnext(field, query[1:]...)
+				return vn.qnext(rv.FieldByName(query[0]), query[1:]...)
 			}
+		}
+		for fieldi := 0; fieldi < rv.NumField(); fieldi++ {
+			field := rv.Field(fieldi)
+			sfield := rvt.Field(fieldi)
 			for _, tlookup := range v.tags {
 				if sfield.Tag.Get(tlookup) == query[0] {
 					vn := v.new(field)

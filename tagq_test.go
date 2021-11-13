@@ -46,5 +46,6 @@ func TestQ(t *testing.T) {
 	assert.Equal(t, qx.Age, Q(qx, "age").Int())
 	assert.Equal(t, qx.MapItems["waldo"], Q(qx, "xmap-items", "waldo").Str())
 	assert.Equal(t, qx.MapItems["waldo"], Q(qx, "MapItems", "waldo").Str())
-	assert.Equal(t, qx.MapItems["flintspears"], Q(qx, "hchildren", "flintspears").Str())
+	assert.Equal(t, qx.MapItems["fred"], Q(qx, "map_items", "fred").Str())
+	assert.Equal(t, qx.Children[0].Scoreboard[1], Q(qx, "hchildren", "0", "Scoreboard", "1").Int())
 }
